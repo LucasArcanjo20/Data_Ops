@@ -1,0 +1,23 @@
+[
+  {
+    "numero_original": "31999999999\r",
+    "numero_formatado": "+5531999999999",
+    "status": "válido",
+    "whatsapp": "não registrado",
+    "data_validacao": "2025-10-29T18:35:39.988Z"
+  },
+  {
+    "numero_original": "31988888888\r",
+    "numero_formatado": "+5531988888888",
+    "status": "válido",
+    "whatsapp": "não registrado",
+    "data_validacao": "2025-10-29T18:35:41.450Z"
+  },
+  {
+    "numero_original": "21977777777\r",
+    "numero_formatado": "+5521977777777",
+    "status": "válido",
+    "whatsapp": "não registrado",
+    "data_validacao": "2025-10-29T18:35:42.906Z"
+  }
+]

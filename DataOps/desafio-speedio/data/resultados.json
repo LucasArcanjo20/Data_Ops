@@ -1,0 +1,32 @@
+[
+  {
+    "numero_original": "34999999999\r",
+    "numero_formatado": null,
+    "status": "inválido",
+    "data_validacao": "2025-10-30T19:58:19.023Z"
+  },
+  {
+    "numero_original": "34988888888\r",
+    "numero_formatado": null,
+    "status": "inválido",
+    "data_validacao": "2025-10-30T19:58:19.024Z"
+  },
+  {
+    "numero_original": "11987654321\r",
+    "numero_formatado": null,
+    "status": "inválido",
+    "data_validacao": "2025-10-30T19:58:19.024Z"
+  },
+  {
+    "numero_original": "5581999999999\r",
+    "numero_formatado": null,
+    "status": "inválido",
+    "data_validacao": "2025-10-30T19:58:19.024Z"
+  },
+  {
+    "numero_original": "123\r",
+    "numero_formatado": null,
+    "status": "inválido",
+    "data_validacao": "2025-10-30T19:58:19.024Z"
+  }
+]

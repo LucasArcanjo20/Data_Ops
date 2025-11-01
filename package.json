@@ -1,0 +1,17 @@
+{
+  "name": "desafio-speedio",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "ISC",
+  "type": "module",
+  "scripts": {
+    "start": "node src/validatePhones.js",
+    "twilio": "node src/validatePhonesTwilio.js",
+    "twilio-whatsapp": "node src/validatePhonesTwilio.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "google-libphonenumber": "^3.2.43",
+    "twilio": "^5.10.4"
+  }
+}

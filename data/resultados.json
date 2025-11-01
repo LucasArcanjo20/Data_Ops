@@ -1,0 +1,37 @@
+[
+  {
+    "numero_original": "34999999999\r",
+    "numero_formatado": "+5534999999999",
+    "status": "válido",
+    "whatsapp": "não registrado",
+    "data_validacao": "2025-10-29T18:21:40.298Z"
+  },
+  {
+    "numero_original": "34988888888\r",
+    "numero_formatado": "+5534988888888",
+    "status": "válido",
+    "whatsapp": "não registrado",
+    "data_validacao": "2025-10-29T18:21:41.727Z"
+  },
+  {
+    "numero_original": "11987654321\r",
+    "numero_formatado": "+5511987654321",
+    "status": "válido",
+    "whatsapp": "não registrado",
+    "data_validacao": "2025-10-29T18:21:43.383Z"
+  },
+  {
+    "numero_original": "5581999999999\r",
+    "numero_formatado": "+5581999999999",
+    "status": "válido",
+    "whatsapp": "não registrado",
+    "data_validacao": "2025-10-29T18:21:45.051Z"
+  },
+  {
+    "numero_original": "123\r",
+    "numero_formatado": "+55123",
+    "status": "válido",
+    "whatsapp": "não registrado",
+    "data_validacao": "2025-10-29T18:21:46.712Z"
+  }
+]
