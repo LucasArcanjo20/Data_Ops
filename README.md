@@ -138,71 +138,126 @@ DataOps
 
 ---
 
-### 2️⃣ Coleta de Dados (LinkedIn)
-- **Ferramenta:** Puppeteer com plugin Stealth.
-- **Meta:** 20–30 perfis/dia/instância.  
-- **Campos coletados:** nome, cargo, empresa, localização (dados públicos).  
-- **Delays:** 2–3 min entre buscas, 2–10s entre perfis.  
-- **Mitigação:** rotação de user-agents, pausa em caso de captcha, proxies sob demanda.  
-- **Métricas:** taxa de bloqueio, custo por perfil, tempo médio.
+
+## 2️⃣ Coleta de Dados (LinkedIn)
+
+O módulo de coleta de dados foi criado para capturar informações públicas de profissionais no LinkedIn de forma controlada, sem violar os termos da plataforma nem comprometer a reputação do sistema.
+
+**Ferramenta utilizada:**  
+A coleta é feita com o **Puppeteer**, uma biblioteca Node.js que simula a navegação de um usuário real em um navegador automatizado.  
+Para evitar detecção, é usado o **plugin Stealth**, que mascara a automação e imita o comportamento humano, reduzindo o risco de bloqueio.
+
+**Funcionamento geral:**  
+O sistema realiza buscas por palavras-chave ou profissões definidas (como “engenheiro de dados” ou “analista de marketing”), acessa os primeiros resultados e coleta apenas informações **públicas**, como:
+- Nome completo
+- Cargo atual
+- Empresa
+- Localização
+
+Esses dados são salvos em formato **CSV** ou **JSON**, permitindo integração simples com outras partes do MVP.
+
+**Metas e limites de operação:**  
+Durante o MVP, o foco é manter o volume baixo para garantir estabilidade:
+- Coleta de aproximadamente **20 a 30 perfis por dia** por instância.  
+- Pausas de **2 a 3 minutos entre buscas** e **2 a 10 segundos entre perfis**.  
+Esses intervalos imitam o comportamento humano e reduzem o risco de detecção pelo LinkedIn.
+
+**Mitigações contra bloqueio:**
+- Rotação de **user-agents** (identidades virtuais do navegador) para parecer que os acessos vêm de usuários diferentes.  
+- Pausa automática em caso de **captcha**.  
+- Uso de **proxies** (endereços IP alternativos) sob demanda, caso o sistema detecte bloqueios.
+
+**Métricas acompanhadas:**
+- Taxa de bloqueio (quantos acessos são negados pela plataforma).  
+- Custo por perfil coletado (tempo e recursos).  
+- Tempo médio de coleta por perfil.  
+Essas métricas ajudam a dimensionar o custo e a viabilidade da automação em escala.
 
 ---
 
-### 3️⃣ Envio de Mensagens WhatsApp
-- **API:** WhatsApp Business / Twilio / MessageBird.
-- **Regras:**
-  - Verificar opt-out antes do envio.
-  - Pacing de 2–3s entre mensagens.
-  - Registrar entregas e respostas.
-- **Exemplo de mensagem:**
-  ```
-  Olá [Nome], tudo bem? Me chamo [Seu Nome] da Speedio.
-  Vi que você trabalha com [Área] e achei que nosso serviço de dados poderia te ajudar.
-  Se não quiser receber mais mensagens, responda SAIR.
-  ```
-- **Controle de reputação:** número reserva, volume gradual, logs de entrega.
+## 3️⃣ Envio de Mensagens WhatsApp
+
+O módulo de envio automatizado de mensagens é responsável por realizar a prospecção comercial via **WhatsApp**, respeitando as regras de uso da plataforma e as exigências da **LGPD**.
+
+**API e provedores:**  
+A integração é feita com a **WhatsApp Business API**, ou, alternativamente, com provedores confiáveis como **Twilio** ou **MessageBird**, que oferecem rotas oficiais de envio e monitoramento de mensagens.
+
+**Regras de operação:**
+1. **Verificação de opt-out:** Antes de enviar qualquer mensagem, o sistema confirma se o contato não solicitou o descadastro.  
+2. **Controle de ritmo (pacing):** Há um intervalo de **2 a 3 segundos entre cada envio** para imitar o comportamento humano e reduzir o risco de bloqueio.  
+3. **Registro completo:** Cada envio e resposta é registrado em log, com horário, status e identificador do destinatário.  
+
+**Modelo de mensagem utilizado:**
+```
+Olá [Nome], tudo bem? Me chamo [Seu Nome] da Speedio.
+Vi que você trabalha com [Área] e achei que nosso serviço de dados poderia te ajudar.
+Se não quiser receber mais mensagens, responda SAIR.
+```
+Esse modelo foi pensado para ser respeitoso, direto e transparente.  
+A frase “Responda SAIR” garante o direito de recusa, atendendo às exigências da LGPD.
+
+**Controle de reputação:**
+- Utilização de **número reserva** caso o principal seja bloqueado.  
+- Escalonamento gradual do volume de envios.  
+- Monitoramento contínuo de entregas e respostas, criando métricas de engajamento.
 
 ---
 
 ## Riscos, Gargalos e Contramedidas
 
+Abaixo estão os principais riscos técnicos e operacionais identificados, com suas respectivas estratégias de mitigação:
+
 | Risco | Descrição | Mitigação |
 |-------|------------|-----------|
-| Bloqueio do WhatsApp | Volume alto ou envios manuais. | API oficial, pacing e monitoramento. |
-| Bloqueio do LinkedIn | Detecção de scraping. | Stealth plugin, pausas e proxies. |
-| LGPD / Privacidade | Dados pessoais sem consentimento. | Opt-out claro, logs auditáveis, retenção de 30 dias. |
-| Performance | Volume crescente. | Filas (BullMQ), microserviços, DB real. |
-| Dependência de terceiros | Falhas de API. | Provedores alternativos e mocks locais. |
+| **Bloqueio do WhatsApp** | O envio em grande volume pode gerar bloqueio de número ou conta. | Uso da API oficial, limites diários de envio e monitoramento de reputação. |
+| **Bloqueio do LinkedIn** | A automação pode ser detectada como comportamento suspeito. | Uso do modo stealth, delays longos, proxies e comportamento humano simulado. |
+| **Questões de LGPD / Privacidade** | Coleta ou contato sem consentimento explícito. | Implementar opt-out em todas as mensagens e manter logs auditáveis de consentimento. |
+| **Gargalo de performance** | O volume de dados pode crescer rapidamente. | Utilizar filas (BullMQ), modularização e migração para banco de dados real. |
+| **Dependência de terceiros** | APIs externas podem falhar ou mudar regras. | Ter provedores alternativos e criar mocks locais para testes. |
+
+Cada uma dessas medidas foi pensada para garantir que o MVP seja funcional, seguro e sustentável ao longo do tempo.
 
 ---
 
 ## Privacidade e Conformidade (LGPD)
 
-- Opt-out obrigatório em todas as mensagens.  
-- Retenção de logs: 30 dias.  
-- Armazenamento mínimo e apenas dados públicos.  
-- Registros de consentimento e finalidade do tratamento.  
-- Criptografia e controle de acesso (quando migrar para DB real).
+O projeto segue princípios de **transparência, necessidade e segurança**, conforme exigido pela **Lei Geral de Proteção de Dados (Lei nº 13.709/2018)**.
+
+- **Opt-out obrigatório:** Todas as mensagens incluem a opção de descadastro (“Responda SAIR”).  
+- **Retenção de logs:** As informações de envio e coleta são armazenadas por até **30 dias** apenas para auditoria.  
+- **Minimização de dados:** São coletados apenas dados públicos e estritamente necessários.  
+- **Registro de consentimento:** Todas as ações são registradas com data, hora e finalidade do tratamento.  
+- **Segurança e acesso:** Quando houver migração para banco de dados, será implementada criptografia em repouso e controle de acesso restrito.
+
+Essas práticas garantem conformidade com a LGPD e reduzem o risco de uso indevido das informações.
 
 ---
 
 ## Monitoramento e Logs
 
-- **Logs locais:** `logs/validations.log` e `logs/sent.log` (JSONL).  
-- **Métricas iniciais:** planilha (Google Sheets) com volume, erros e bloqueios.  
-- **Dashboard (futuro):** Metabase / Grafana.  
-- **Alertas automáticos:** Telegram / Email quando taxa de erro > X%.  
-- **Retenção:** 30 dias.
+O sistema inclui mecanismos de observabilidade desde o MVP para garantir rastreabilidade e resposta rápida a erros.
+
+- **Logs locais:** Gerados nos arquivos `logs/validations.log` e `logs/sent.log`, em formato JSONL, contendo data, ação e resultado.  
+- **Métricas iniciais:** Podem ser exportadas para uma planilha (Google Sheets) para acompanhamento manual dos volumes de envio, taxas de erro e bloqueios.  
+- **Dashboard (futuro):** Quando houver banco de dados real, será implementado o uso de ferramentas como **Metabase** ou **Grafana** para visualização das métricas.  
+- **Alertas automáticos:** O sistema poderá enviar notificações por **Telegram** ou **e-mail** caso o índice de erro ultrapasse determinado limite.  
+- **Retenção:** Todos os logs são mantidos por 30 dias, respeitando o princípio de minimização.
+
+Esse modelo de monitoramento garante controle operacional e transparência sobre todas as atividades do sistema.
 
 ---
 
 ## Escalabilidade — Próximos Passos
 
-1. Migrar armazenamento de JSON → PostgreSQL/MongoDB.  
-2. Implementar **BullMQ + Redis** para orquestração.  
-3. Rodar cada módulo em container **Docker**.  
-4. Orquestrar com **Kubernetes** (autoscaling).  
-5. Implementar **Prometheus + Grafana** para observabilidade.
+Embora o MVP utilize uma estrutura simples (arquivos locais e execução sequencial), a arquitetura foi planejada para crescer sem reescrever o sistema do zero.
+
+1. **Migração de armazenamento:** Substituir JSON/CSV por banco de dados PostgreSQL ou MongoDB, permitindo consultas e integrações mais robustas.  
+2. **Implementação de filas:** Adotar BullMQ e Redis para orquestrar tarefas em paralelo e distribuir a carga.  
+3. **Containerização:** Separar cada módulo (validador, coletor e enviador) em containers independentes usando Docker.  
+4. **Orquestração automática:** Utilizar Kubernetes para escalar dinamicamente conforme a demanda.  
+5. **Observabilidade completa:** Integrar Prometheus e Grafana para métricas, logs e alertas centralizados.
+
+Essas etapas preparam o sistema para lidar com grandes volumes e manter alta disponibilidade em ambientes corporativos.
 
 ---
 
@@ -210,22 +265,27 @@ DataOps
 
 | Semana | Entregas | Objetivo |
 |--------|-----------|----------|
-| **1** | Configuração do ambiente + Validador inicial | Reduzir risco técnico |
-| **2** | Integração WhatsApp + Coletor básico | Testar envio e scraping inicial |
-| **3** | Escala controlada + Monitoramento | Aumentar volume e estabilidade |
-| **4** | Testes finais + Documentação | Consolidar resultados e preparar entrega |
+| **1** | Configuração do ambiente e desenvolvimento do validador de telefones. | Reduzir o risco técnico inicial e validar o fluxo básico de dados. |
+| **2** | Integração com WhatsApp e implementação do coletor básico de LinkedIn. | Testar o envio de mensagens e a coleta inicial em ambiente controlado. |
+| **3** | Escala controlada e inclusão de monitoramento. | Aumentar o volume gradualmente e garantir estabilidade do sistema. |
+| **4** | Testes finais, consolidação de métricas e documentação completa. | Garantir a entrega final e preparar o MVP para avaliação. |
 
-**Justificativa:**  
-Começar pequeno reduz riscos de bloqueio e falhas. A evolução por etapas permite validar hipóteses técnicas e legais com segurança.
+**Justificativa da ordem:**  
+A sequência prioriza primeiro os riscos técnicos e legais (validação e opt-out), depois o teste de integração entre os módulos, e por fim a escalabilidade e a documentação.  
+Esse formato de entrega incremental permite aprendizado contínuo e ajustes rápidos a cada etapa.
 
 ---
 
 ## Resultados Esperados (MVP)
 
-- Prova de conceito funcional com logs e controle de opt-out.  
-- Envio de mensagens em ambiente controlado.  
-- Coleta básica de perfis sem bloqueios.  
-- Base para migração para arquitetura escalável.
+Ao final das quatro semanas, o MVP deverá demonstrar:
+
+- Um processo de **validação de telefones funcional e auditável**, com registros de cada tentativa.  
+- Um **envio de mensagens controlado**, com rastreamento e opt-out ativo.  
+- Uma **coleta básica de dados públicos** de forma segura e sem bloqueios.  
+- Uma arquitetura pronta para **migração gradual** para soluções escaláveis e integradas.
+
+Esses resultados comprovam a viabilidade técnica e operacional da proposta, equilibrando eficiência, segurança e conformidade legal.
 
 ---
 
@@ -238,3 +298,4 @@ Começar pequeno reduz riscos de bloqueio e falhas. A evolução por etapas perm
 - [Puppeteer Documentation](https://pptr.dev)
 
 ---
+
