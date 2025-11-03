@@ -289,6 +289,15 @@ Esses resultados comprovam a viabilidade técnica e operacional da proposta, equ
 
 ---
 
+## Observação
+
+├── ecretsfl
+├── et --soft HEAD--1
+├── u origin main
+
+Arquivos empacotados: por que não foi possível ler as variáveis do arquivo .env? Esses arquivos contêm dados sensíveis (credenciais e códigos sigilosos) que permitem acessar informações protegidas.
+Para executar a aplicação, é necessário fornecer: chaves de API, senhas e tokens pessoais
+
 ## Referências
 
 - [Node.js Documentation](https://nodejs.org/)
@@ -298,4 +307,5 @@ Esses resultados comprovam a viabilidade técnica e operacional da proposta, equ
 - [Puppeteer Documentation](https://pptr.dev)
 
 ---
+
 
