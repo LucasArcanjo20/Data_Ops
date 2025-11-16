@@ -20,7 +20,7 @@ Construir um MVP em 4 semanas capaz de:
 |-----------|--------------|
 | Validação de Telefones | 100–500 números |
 | Envio de Mensagens | 50–100 mensagens |
-| Coleta de Perfis (LinkedIn) | ~20 perfis |
+| Coleta de Perfis (LinkedIn) | 20 perfis |
 
 ---
 
@@ -307,5 +307,6 @@ Para executar a aplicação, é necessário fornecer: chaves de API, senhas e to
 - [Puppeteer Documentation](https://pptr.dev)
 
 ---
+
 
 
